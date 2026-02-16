@@ -1,20 +1,27 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const connectDB = require('./config/db');
+const productRoutes = require('./routers/productRoutes');
+const orderRoutes = require('./routers/orderRoutes');
+
+connectDB();
 
 const app = express();
 
-// Middlewares
 app.use(cors());
-app.use(express.json()); // Permite recibir datos en formato JSON
+app.use(express.json());
 
-// Ruta de prueba
-app.get('/api', (req, res) => {
-    res.json({ mensaje: '¡Servidor de PCStore funcionando!' });
+// Aquí conectamos las rutas
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+
+app.get('/', (req, res) => {
+    res.send('API is running...');
 });
 
-// Puerto y arranque
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
-});nr
+    console.log(`Server running on port ${PORT}`);
+});
